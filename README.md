@@ -1,2 +1,4 @@
 # TeradataSQLTricks
-Collection of some tricky Teradata SQL code
+
+This is a collection of Teradata SQLs
+
