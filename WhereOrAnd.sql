@@ -1,6 +1,5 @@
 /*
 	Use Where or And when multiple conditions in JOIN
-	
 	When use inner join, there is no different to put the condition 
 	after Where or And. But if it is a left join, need to think about
 	the logic carefully.
