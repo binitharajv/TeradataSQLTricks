@@ -1,10 +1,12 @@
 /*
-	QUANTILE is a useful function in Teradata, it divids a range into
-	several pieces, and return the value at that point.
+	QUANTILE - Computes the quantile scores for the values in a group.
+
+	In some cases, we only want to calcualte the quantile for certain values, not for
+	all values. We may use CASE END to split all values. 
 	
-	Sometimes, we only want to apply it in a part of one column. For this 
-	example, we put -1 for any value less or equal 5, and only apply quantile 
-	to values above 5. But the result is not expected.
+	For this example, we only want to calcuate quantile for value above 5, and if LE. 4, we
+	assign a -1. Check the query 1, it looks correct, but returned a wrong result. 
+	
 */
 
 CREATE   TABLE quan_test (
@@ -23,7 +25,8 @@ INSERT INTO c4ustcrm.quan_test (num) VALUES (8);
 INSERT INTO c4ustcrm.quan_test (num) VALUES (9);
 INSERT INTO c4ustcrm.quan_test (num) VALUES (10);
 
-
+/* Query 1
+*/
 SELECT 
 num, 
 CASE	
@@ -43,5 +46,37 @@ FROM quan_test;
 7	4
 8	4
 9	5
+10	5
+*/
+
+/* Query 2 - The correct one
+*/
+SELECT
+	num,
+	-1 AS p
+	FROM 
+		quan_test
+	WHERE 
+		num <= 5
+UNION ALL
+SELECT
+	num,
+	QUANTILE(5, num) + 1 AS p
+	FROM
+		quan_test
+	WHERE
+		num > 5;
+		
+/*
+0	-1
+1	-1
+2	-1
+3	-1
+4	-1
+5	-1
+6	1
+7	2
+8	3
+9	4
 10	5
 */
